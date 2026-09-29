@@ -1,0 +1,143 @@
+package com.mycompany.math;
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class Math {
+
+    public static double roundAvoid(double value, int places) {
+        double scale = java.lang.Math.pow(10, places);
+        return java.lang.Math.round(value * scale) / scale;
+    }
+
+    public static void main(String[] args) {
+
+        Random random = new Random();
+        Scanner input = new Scanner(System.in);
+
+        // --------------------------------------------------
+        // TASK 1
+        // Random number from 0 to 90
+        // --------------------------------------------------
+
+        int number = random.nextInt(91);
+
+        double radians = java.lang.Math.toRadians(number);
+
+        double sine = java.lang.Math.sin(radians);
+        double cosine = java.lang.Math.cos(radians);
+        double tangent = java.lang.Math.tan(radians);
+
+        System.out.printf(
+                "Number: %d Sine: %.3f Cosine: %.3f Tangent: %.3f%n",
+                number, sine, cosine, tangent
+        );
+
+        // --------------------------------------------------
+        // TASK 2
+        // Random radius from 1.0 to 20.0
+        // --------------------------------------------------
+
+        double radius = 1.0 + random.nextDouble() * 19.0;
+
+        double area = java.lang.Math.PI
+                * java.lang.Math.pow(radius, 2);
+
+        double volume = (4.0 / 3.0)
+                * java.lang.Math.PI
+                * java.lang.Math.pow(radius, 3);
+
+        System.out.printf(
+                "Radius: %.3f Area: %.3f Sphere Volume: %.3f%n",
+                radius, area, volume
+        );
+
+        // --------------------------------------------------
+        // TASK 3
+        // Random number from 100,000,000 to 100,000,000,000
+        // --------------------------------------------------
+
+        double largeNumber =
+                100_000_000.0
+                + random.nextDouble()
+                * (100_000_000_000.0 - 100_000_000.0);
+
+        double squareRoot = java.lang.Math.sqrt(largeNumber);
+        double naturalLog = java.lang.Math.log(largeNumber);
+        double log10 = java.lang.Math.log10(largeNumber);
+
+        System.out.printf(
+                "Large Number: %.5f%n",
+                largeNumber
+        );
+
+        System.out.printf(
+                "Square Root: %.5f%n",
+                squareRoot
+        );
+
+        System.out.printf(
+                "Natural Log: %.5f%n",
+                naturalLog
+        );
+
+        System.out.printf(
+                "Log10: %.5f%n",
+                log10
+        );
+
+        // --------------------------------------------------
+        // TASK 4
+        // E = mc^2
+        // --------------------------------------------------
+
+        double speedOfLight = 299_792_458.0;
+
+        double massKilograms =
+                largeNumber
+                / java.lang.Math.pow(speedOfLight, 2);
+
+        double massGrams = massKilograms * 1000;
+
+        System.out.print(
+                "Enter number of decimal places for mass: "
+        );
+
+        int massPlaces = input.nextInt();
+
+        double roundedMass =
+                roundAvoid(massGrams, massPlaces);
+
+        System.out.println(
+                "Mass required: "
+                + roundedMass
+                + " grams"
+        );
+
+        // --------------------------------------------------
+        // TASK 5
+        // User enters a real number and an integer
+        // --------------------------------------------------
+
+        System.out.print("Enter a real number: ");
+        double value = input.nextDouble();
+
+        System.out.print("Enter an integer: ");
+        int exponent = input.nextInt();
+
+        System.out.print("Enter number of decimal places: ");
+        int decimalPlaces = input.nextInt();
+
+        double result =
+                java.lang.Math.pow(value, exponent);
+
+        double roundedResult =
+                roundAvoid(result, decimalPlaces);
+
+        System.out.println(
+                "Result: " + roundedResult
+        );
+
+        input.close();
+    }
+}
