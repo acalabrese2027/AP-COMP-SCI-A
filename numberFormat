@@ -1,0 +1,158 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ */
+
+package com.mycompany.numberformat;
+
+import java.math.BigInteger;
+import java.text.NumberFormat;
+import java.util.Locale;
+import java.util.Random;
+import java.util.Scanner;
+
+/**
+ * Numberformat
+ * Solves four small tasks using Scanner, NumberFormat, Math, and BigInteger:
+ *   1. Percent of girls / boys at a school
+ *   2. Dollar conversion to British Pounds and Euros
+ *   3. Pi formatted to 0-15 decimal places
+ *   4. Random number from 100,000,000 to 999e18 (no scientific notation)
+ *
+ * @author acalabrese2027
+ */
+public class Numberformat {
+
+    // Exchange rates (units of foreign currency per 1 US dollar)
+    private static final double GBP_RATE = 0.75;  // 9/26 rate
+    private static final double EUR_RATE = 0.86;  // today's rate
+
+    public static void main(String[] args) {
+
+        // Scanner for keyboard input; US locale so "12.50" parses with a period
+        Scanner input = new Scanner(System.in);
+        input.useLocale(Locale.US);
+
+        // ---------- Task 1: Girls vs. boys percentage ----------
+        System.out.println("=== Task 1: School Percentages ===");
+        percentOfGirlsAndBoys(input);
+
+        // ---------- Task 2: Currency conversion ----------
+        System.out.println("\n=== Task 2: Currency Conversion ===");
+        System.out.print("Enter total amount of money in dollars and cents (e.g. 125.50): $");
+        double dollars = input.nextDouble();
+
+        // British Pounds, shown in British (UK) number format
+        convertCurrency(dollars, GBP_RATE, "British Pounds (GBP)", Locale.UK);
+        // Euros, shown in a euro-zone (German) number format
+        convertCurrency(dollars, EUR_RATE, "Euros (EUR)", Locale.GERMANY);
+
+        // ---------- Task 3: Pi to N decimal places ----------
+        System.out.println("\n=== Task 3: Pi to N Decimal Places ===");
+        printPi(input);
+
+        // ---------- Task 4: Big random number ----------
+        System.out.println("\n=== Task 4: Random Number ===");
+        printBigRandom();
+
+        input.close();
+    }
+
+    /**
+     * Task 1: Asks for total students and number of girls, then prints
+     * the percentage of girls and boys using NumberFormat.
+     */
+    public static void percentOfGirlsAndBoys(Scanner input) {
+        System.out.print("Enter the total number of students at the school: ");
+        int totalStudents = input.nextInt();
+
+        System.out.print("Enter the number of girls at the school: ");
+        int girls = input.nextInt();
+
+        // Basic validation to avoid divide-by-zero or impossible values
+        if (totalStudents <= 0 || girls < 0 || girls > totalStudents) {
+            System.out.println("Invalid numbers: girls must be between 0 and the total, "
+                    + "and the total must be greater than 0.");
+            return;
+        }
+
+        int boys = totalStudents - girls;
+
+        // Convert to fractions (cast to double so we don't use integer division)
+        double girlsFraction = (double) girls / totalStudents;
+        double boysFraction = (double) boys / totalStudents;
+
+        // NumberFormat percent instance, showing 2 decimal places
+        NumberFormat percent = NumberFormat.getPercentInstance();
+        percent.setMinimumFractionDigits(2);
+        percent.setMaximumFractionDigits(2);
+
+        System.out.println("Girls: " + percent.format(girlsFraction));
+        System.out.println("Boys:  " + percent.format(boysFraction));
+    }
+
+    /**
+     * Task 2: Converts a dollar amount to another currency and prints it
+     * in the number format of the given locale, mentioning the exchange rate.
+     *
+     * @param dollars      amount in US dollars
+     * @param rate         units of the other currency per 1 US dollar
+     * @param currencyName display name of the target currency
+     * @param locale       locale used to format the converted amount
+     */
+    public static void convertCurrency(double dollars, double rate,
+                                       String currencyName, Locale locale) {
+        double converted = dollars * rate;
+
+        // Currency formatter for the chosen locale (adds the pound or euro symbol)
+        NumberFormat money = NumberFormat.getCurrencyInstance(locale);
+
+        System.out.println("Exchange rate: 1 USD = " + rate + " " + currencyName);
+        System.out.println("$" + String.format(Locale.US, "%.2f", dollars)
+                + " = " + money.format(converted));
+    }
+
+    /**
+     * Task 3: Asks for an integer from 0 to 15 and prints Math.PI
+     * rounded to that many decimal places.
+     */
+    public static void printPi(Scanner input) {
+        System.out.print("Enter the number of decimal places for Pi (0 to 15): ");
+        int places = input.nextInt();
+
+        if (places < 0 || places > 15) {
+            System.out.println("Please enter a whole number from 0 to 15.");
+            return;
+        }
+
+        // Build a format string such as "%.5f" using the requested precision
+        String format = "%." + places + "f";
+        System.out.println("Pi to " + places + " decimal place(s): "
+                + String.format(Locale.US, format, Math.PI));
+    }
+
+    /**
+     * Task 4: Generates a random whole number between 100,000,000 and
+     * 999e18 (inclusive). 999e18 is larger than a long can hold, so
+     * BigInteger is used; its toString() never uses scientific notation.
+     */
+    public static void printBigRandom() {
+        BigInteger min = new BigInteger("100000000");                            // 100,000,000
+        BigInteger max = new BigInteger("999").multiply(BigInteger.TEN.pow(18)); // 999e18
+
+        // Size of the range (inclusive of both ends)
+        BigInteger range = max.subtract(min).add(BigInteger.ONE);
+
+        // Pick random bit patterns until one falls inside the range (keeps it uniform)
+        Random rand = new Random();
+        BigInteger offset;
+        do {
+            offset = new BigInteger(range.bitLength(), rand);
+        } while (offset.compareTo(range) >= 0);
+
+        BigInteger result = min.add(offset);
+
+        // Plain digits and a comma-grouped version, both without scientific notation
+        System.out.println("Random number: " + result);
+        System.out.println("Formatted:     " + NumberFormat.getInstance(Locale.US).format(result));
+    }
+}
