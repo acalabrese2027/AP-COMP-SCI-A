@@ -1,0 +1,113 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ */
+
+package com.mycompany.typeandwrapper;
+
+import java.util.Scanner;
+
+/**
+ *
+ * @author acalabrese2027
+ */
+public class TypeandWrapper {
+
+    // 1a: Enumeration of the days of the week
+    enum Days {
+        MONDAY(1),
+        TUESDAY(2),
+        WEDNESDAY(3),
+        THURSDAY(4),
+        FRIDAY(5),
+        SATURDAY(6),
+        SUNDAY(7);
+
+        private final int dayNumber;
+
+        Days(int dayNumber) {
+            this.dayNumber = dayNumber;
+        }
+
+        public int getDayNumber() {
+            return dayNumber;
+        }
+    }
+
+    // 1b: Enumeration of the months of the year
+    enum Months {
+        JANUARY(1),
+        FEBRUARY(2),
+        MARCH(3),
+        APRIL(4),
+        MAY(5),
+        JUNE(6),
+        JULY(7),
+        AUGUST(8),
+        SEPTEMBER(9),
+        OCTOBER(10),
+        NOVEMBER(11),
+        DECEMBER(12);
+
+        private final int monthNumber;
+
+        Months(int monthNumber) {
+            this.monthNumber = monthNumber;
+        }
+
+        public int getMonthNumber() {
+            return monthNumber;
+        }
+    }
+
+    public static void main(String[] args) {
+
+        Scanner input = new Scanner(System.in);
+
+        // 1a: Print all days of the week
+        System.out.println("1a. Days of the Week");
+
+        for (Days day : Days.values()) {
+            System.out.println(day.getDayNumber() + " - " + day);
+        }
+
+        // 1b: Print all months of the year
+        System.out.println("\n1b. Months of the Year");
+
+        for (Months month : Months.values()) {
+            System.out.println(month.getMonthNumber() + " - " + month);
+        }
+
+        // 2: Ask for the CCHS username
+        System.out.print(
+                "\nEnter your CCHS username (including graduation year): "
+        );
+
+        String username = input.nextLine();
+
+        // Extract the last four characters of the username
+        String yearString = username.substring(username.length() - 4);
+
+        // Convert the year string into an Integer object
+        Integer graduationYear = Integer.valueOf(yearString);
+
+        // Display the graduation year
+        System.out.println(
+                "Your graduation year is: " + graduationYear
+        );
+
+        // Display the year after graduation
+        System.out.println(
+                "The year after your graduation year is: "
+                + (graduationYear + 1)
+        );
+
+        // Display the graduation year in binary
+        System.out.println(
+                "In computer language, you graduate in: "
+                + Integer.toBinaryString(graduationYear)
+        );
+
+        input.close();
+    }
+}
+
