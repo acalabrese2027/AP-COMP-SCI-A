@@ -1,0 +1,116 @@
+package com.mycompany.intrestratecalculator;
+
+import java.text.NumberFormat;
+import java.util.Scanner;
+
+/**
+ * Main class: handles user input and output only.
+ * It is public and named after the file/project so Maven can find it.
+ * All calculation logic lives inside the InterestRateCalculator class below.
+ */
+public class IntrestRateCalculator {
+
+    public static void main(String[] args) {
+
+        Scanner input = new Scanner(System.in);
+
+        // Formatters for currency and percentage output
+        NumberFormat currency = NumberFormat.getCurrencyInstance();
+        NumberFormat percent = NumberFormat.getPercentInstance();
+        percent.setMinimumFractionDigits(1); // show 3.5% rather than 4%
+
+        // Ask the user for the loan amount
+        System.out.print("Enter the amount to borrow (e.g. 1000000): $");
+        double amount = input.nextDouble();
+
+        // Ask the user for the repayment period
+        System.out.print("Enter the number of months for repayment: ");
+        int months = input.nextInt();
+
+        // Create the calculator and let it do the work
+        InterestRateCalculator calculator = new InterestRateCalculator();
+
+        try {
+            calculator.calculatePayments(amount, months);
+        } catch (IllegalArgumentException e) {
+            // The calculator rejects invalid values (zero or negative)
+            System.out.println("Error: " + e.getMessage());
+            input.close();
+            return;
+        }
+
+        // Display the results using the public getters
+        System.out.println("\n===== LOAN SUMMARY =====");
+        System.out.println("Amount borrowed:      " + currency.format(amount));
+        System.out.println("Annual interest rate: " + percent.format(InterestRateCalculator.RATE));
+        System.out.println("Months to repay:      " + months);
+        System.out.println("Monthly payment:      " + currency.format(calculator.getMonthlyPayment()));
+        System.out.println("Total amount repaid:  " + currency.format(calculator.getTotalRepaid()));
+
+        input.close();
+    }
+}
+
+/**
+ * Black box that calculates loan repayments.
+ * Package-private (no "public") because only the main class needs it,
+ * and Java allows only one public class per file.
+ * Only RATE, calculatePayments() and the two getters are visible from outside.
+ */
+class InterestRateCalculator {
+
+    /** Annual interest rate (3.5%). Public so main can display it; final so it can't change. */
+    public static final double RATE = 0.035;
+
+    private static final int MONTHS_PER_YEAR = 12; // internal detail, so private
+
+    // Results are stored privately and exposed only through getters
+    private double monthlyPayment;
+    private double totalRepaid;
+
+    /**
+     * Calculates the monthly payment and total repaid.
+     *
+     * @param amount the amount borrowed (must be greater than 0)
+     * @param months the number of months to repay (must be greater than 0)
+     */
+    public void calculatePayments(double amount, int months) {
+
+        // Validate input before doing any math
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Amount must be greater than zero.");
+        }
+        if (months <= 0) {
+            throw new IllegalArgumentException("Months must be greater than zero.");
+        }
+
+        // Each month: the principal portion plus that month's interest
+        double principalPortion = getPrincipalPortion(amount, months);
+        double interestPortion = getMonthlyInterest(amount);
+
+        monthlyPayment = principalPortion + interestPortion;
+        totalRepaid = monthlyPayment * months;
+    }
+
+    /** @return the amount paid each month (principal + interest) */
+    public double getMonthlyPayment() {
+        return monthlyPayment;
+    }
+
+    /** @return the monthly payment multiplied by the number of months */
+    public double getTotalRepaid() {
+        return totalRepaid;
+    }
+
+    // ---------- Private helpers (hidden inside the black box) ----------
+
+    /** The amount divided evenly across all months. */
+    private double getPrincipalPortion(double amount, int months) {
+        return amount / months;
+    }
+
+    /** One month's interest: the annual RATE split into 12 parts. */
+    private double getMonthlyInterest(double amount) {
+        return amount * (RATE / MONTHS_PER_YEAR);
+    }
+}
