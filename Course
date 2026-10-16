@@ -1,0 +1,121 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ */
+
+package com.mycompany.course;
+
+/**
+ *
+ * @author acalabrese2027
+ */
+public class Course {
+
+    // Instance data
+    private String title;
+    private String code;
+    private int pointsTotal;
+    private String instructor;
+
+    // Constructor 1: initializes all instance data
+    public Course(String title, String code, int pointsTotal, String instructor) {
+        this.title = title;
+        this.code = code;
+        this.pointsTotal = pointsTotal;
+        this.instructor = instructor;
+    }
+
+    // Constructor 2: course title only; other fields get default values
+    public Course(String title) {
+        this.title = title;
+        this.code = "TBD";
+        this.pointsTotal = 0;
+        this.instructor = "Unassigned";
+    }
+
+    // Accessors (getters)
+    public String getTitle() {
+        return title;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public int getPointsTotal() {
+        return pointsTotal;
+    }
+
+    public String getInstructor() {
+        return instructor;
+    }
+
+    // Mutators (setters)
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public void setPointsTotal(int pointsTotal) {
+        this.pointsTotal = pointsTotal;
+    }
+
+    public void setInstructor(String instructor) {
+        this.instructor = instructor;
+    }
+
+    // Multi-line description of the course
+    @Override
+    public String toString() {
+        return "Course Title: " + title + "\n"
+             + "Course Code: " + code + "\n"
+             + "Total Points: " + pointsTotal + "\n"
+             + "Instructor: " + instructor + "\n";
+    }
+
+    // Entry point NetBeans runs; it hands off to the driver class
+    public static void main(String[] args) {
+        CourseDetails.main(args);
+    }
+}
+
+// Driver class
+class CourseDetails {
+
+    public static void main(String[] args) {
+        // Course 1: created with the full constructor
+        Course course1 = new Course("Computer Science", "AP CS A", 1000, "Ms. Rivera");
+
+        // Course 2: created with the full constructor, then updated with mutators
+        Course course2 = new Course("Calculus", "AP Calc AB", 900, "Mr. Chen");
+        course2.setPointsTotal(1100);
+        course2.setInstructor("Dr. Patel");
+
+        // Course 3: created with the title-only constructor,
+        // remaining values set with setters
+        Course course3 = new Course("Physics");
+        course3.setCode("AP Physics 1");
+        course3.setPointsTotal(950);
+        course3.setInstructor("Mrs. Johnson");
+
+        // Course 4: title-only constructor, values set via setters
+        // and then read back using getters
+        Course course4 = new Course("English Literature");
+        course4.setCode("AP Lit");
+        course4.setPointsTotal(800);
+        course4.setInstructor("Mr. Thompson");
+
+        System.out.println("Updated " + course4.getTitle() + " (" + course4.getCode()
+                + ") taught by " + course4.getInstructor()
+                + " with " + course4.getPointsTotal() + " total points.");
+        System.out.println();
+
+        // Print each course using toString
+        System.out.println(course1);
+        System.out.println(course2);
+        System.out.println(course3);
+        System.out.println(course4);
+    }
+}
