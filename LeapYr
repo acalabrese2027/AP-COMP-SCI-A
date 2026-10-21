@@ -1,0 +1,50 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt
+ * to change this license
+ */
+
+package com.mycompany.leapyr;
+
+import java.util.Scanner;
+
+/**
+ *
+ * @author acalabrese2027
+ */
+public class Leapyr {
+
+    public static void main(String[] args) {
+
+        Scanner input = new Scanner(System.in);
+
+        boolean isLeapYear = false;
+
+        System.out.print("Enter a year: ");
+        int year = input.nextInt();
+
+        if (year < 352) {
+            System.out.println("Error: The year must be 352 or later.");
+        } else {
+
+            if (year % 4 == 0) {
+                if (year % 100 == 0) {
+                    if (year % 400 == 0) {
+                        isLeapYear = true;
+                    }
+                } else {
+                    isLeapYear = true;
+                }
+            }
+
+            if (isLeapYear) {
+                System.out.println(year + " is a leap year.");
+                System.out.println("February has 29 days.");
+            } else {
+                System.out.println(year + " is not a leap year.");
+                System.out.println("February has 28 days.");
+            }
+        }
+
+        input.close();
+    }
+}
