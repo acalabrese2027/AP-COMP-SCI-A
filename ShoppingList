@@ -1,0 +1,147 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt
+ * to change this license
+ */
+
+package com.mycompany.shoppinglist;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+/**
+ *
+ * @author acalabrese2027
+ */
+
+// Shopping Item Class
+class ShoppingItem {
+
+    private String name;
+    private double price;
+
+    // Constructor
+    public ShoppingItem(String name, double price) {
+        this.name = name;
+        this.price = price;
+    }
+
+    // Getters
+    public String getName() {
+        return name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    // Setters
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    // Display item information
+    public String toString() {
+        return name + " - $" + String.format("%.2f", price);
+    }
+}
+
+// Main Shopping List Class
+public class ShoppingList {
+
+    public static void main(String[] args) {
+
+        Scanner input = new Scanner(System.in);
+
+        ArrayList<ShoppingItem> items = new ArrayList<>();
+
+        System.out.println("===== SHOPPING LIST PROGRAM =====");
+
+        String answer = "yes";
+
+        // Get items from user
+        while (answer.equalsIgnoreCase("yes")) {
+
+            System.out.print("\nEnter an item name: ");
+            String name = input.nextLine();
+
+            System.out.print("Enter the price: $");
+            double price = input.nextDouble();
+            input.nextLine();
+
+            ShoppingItem newItem = new ShoppingItem(name, price);
+
+            items.add(newItem);
+
+            System.out.print("Would you like to add another item? (yes/no): ");
+            answer = input.nextLine();
+        }
+
+        // Display shopping list
+        displayList(items);
+
+        // Remove items
+        String removeAnswer = "yes";
+
+        while (removeAnswer.equalsIgnoreCase("yes") && !items.isEmpty()) {
+
+            System.out.print("\nWould you like to remove an item? (yes/no): ");
+            removeAnswer = input.nextLine();
+
+            if (removeAnswer.equalsIgnoreCase("yes")) {
+
+                System.out.print("Enter the number of the item to remove: ");
+                int number = input.nextInt();
+                input.nextLine();
+
+                if (number >= 1 && number <= items.size()) {
+
+                    ShoppingItem removedItem = items.remove(number - 1);
+
+                    System.out.println(removedItem.getName() + " was removed!");
+
+                } else {
+
+                    System.out.println("Invalid item number.");
+
+                }
+
+                // Display updated list
+                displayList(items);
+            }
+        }
+
+        System.out.println("\nThank you for using the Shopping List Program!");
+
+        input.close();
+    }
+
+    // Display list and total cost
+    public static void displayList(ArrayList<ShoppingItem> items) {
+
+        System.out.println("\n===== YOUR SHOPPING LIST =====");
+
+        double total = 0;
+
+        if (items.isEmpty()) {
+
+            System.out.println("Your shopping list is empty.");
+
+        } else {
+
+            for (int i = 0; i < items.size(); i++) {
+
+                System.out.println((i + 1) + ". " + items.get(i));
+
+                total += items.get(i).getPrice();
+            }
+        }
+
+        System.out.printf("\nTotal Cost: $%.2f%n", total);
+
+        System.out.println("==============================");
+    }
+}
